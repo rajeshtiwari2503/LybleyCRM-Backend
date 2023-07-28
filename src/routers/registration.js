@@ -7,10 +7,24 @@ router.post("/registration",async(req,res)=>{
         const body=req.body;
         const newData=new RegistrationModel(body);
         await newData.save();
-        res.send("Registration successful");
+        res.json({status:true,msg:"Registration successful"});
       }catch(err){
         res.status(500).send(err);
       }
+});
+
+router.post("/lybleyCRMlogin",async(req,res)=>{
+     try{
+      const {email,password}=req.body;
+      const user=await RegistrationModel.findOne({email:email,password:password});
+      if(user){
+        res.send(user);
+      }else{
+        res.status(401).send("Incorrect username and password");
+      }
+     }catch(err){
+      res.status(400).send(err);
+     }
 });
 
 router.get("/getAllUser",async(req,res)=>{
