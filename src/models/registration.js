@@ -22,7 +22,7 @@ const registrationSchema=new mongoose.Schema({
     city:{type:String},
     district:{type:String},
     state:{type:String},
-    company:{type:String},
+    companyName:{type:String},
     panNumber:{type:String},
     agreementDate:{type:String},
     perMonthAmount:{type:Number},
