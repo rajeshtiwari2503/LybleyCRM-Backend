@@ -36,6 +36,7 @@ const registrationSchema=new mongoose.Schema({
     url:{type:String},
     logo:{type:String},
     status:{type:String},
+    role:{type:String,default:"BRAND"}
 },{timestamps:true});
 
 const RegistrationModel=new mongoose.model("registration",registrationSchema);
