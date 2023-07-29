@@ -8,6 +8,7 @@ const registrationSchema=new mongoose.Schema({
     gstNo:{type:String},
     owner:{type:String},
     basePrice:{type:Number},
+    category:{type:String},
     distanceLimitForBasePriceInKm:{type:Number},
     aboveBasePricePerKm:{type:Number},
     allowSerialNumberGeneration:{type:String},
