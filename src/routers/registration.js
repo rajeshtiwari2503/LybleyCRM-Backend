@@ -46,4 +46,15 @@ router.get("/getUserBy/:id",async(req,res)=>{
     }
 });
 
+router.patch("/editBrandBy/:id",async(req,res)=>{
+  try{
+    const body=req.body;
+    let _id=req.params.id; 
+    const data=await RegistrationModel.findByIdAndUpdate(_id,body);
+    res.json({status:true,msg:"Updated"});
+  }catch(err){
+    res.status(500).send(err);
+  }
+});
+
 module.exports=router;
