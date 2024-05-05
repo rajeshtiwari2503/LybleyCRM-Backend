@@ -1,4 +1,4 @@
-const { AdminModel, RegistrationModel, DealerModel } = require('../models/registration');
+const { AdminModel, BrandRegistrationModel, DealerModel } = require('../models/registration');
 
 const adminLoginController = async (req, res) => {
     try {
@@ -37,5 +37,33 @@ const adminRegistration = async (req, res) => {
         return res.status(500).send(err);
     }
 };
+const brandRegistration = async (req, res) => {
+    try {
+        const { email } = req.body;
 
-module.exports = { adminLoginController, adminRegistration };
+        const existingUser = await BrandRegistrationModel.findOne({ email });
+
+        if (existingUser) {
+            return res.status(400).json({ status: false, msg: "Email already registered" });
+        }
+
+        // Email does not exist, proceed with registration
+        const newData = new BrandRegistrationModel(req.body);
+        await newData.save();
+        return res.json({ status: true, msg: "Registration successful" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(err);
+    }
+};
+
+const getAllBrand=async(req,res)=>{
+    try{
+      const data=await BrandRegistrationModel.find({});
+      res.send(data);
+    }catch(err){
+      res.status(400).send(err);
+    }
+  }
+
+module.exports = { adminLoginController,brandRegistration, adminRegistration,getAllBrand };

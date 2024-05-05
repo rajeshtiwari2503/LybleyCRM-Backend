@@ -1,6 +1,6 @@
 const express=require("express");
 const router = express.Router();
-const {adminLoginController,adminRegistration}=require("../controllers/adminController")
+const {adminLoginController,brandRegistration,adminRegistration,getAllBrand}=require("../controllers/registrationController")
 const RegistrationModel=require("../models/registration");
 
 // router.post("/registration",async(req,res)=>{
@@ -14,6 +14,9 @@ const RegistrationModel=require("../models/registration");
 //       }
 // });
 router.post("/registration", adminRegistration
+);
+
+router.post("/brandRegistration", brandRegistration
 );
 
 // router.post("/login",async(req,res)=>{
@@ -82,7 +85,7 @@ router.post("/login",adminLoginController )
 //     return res.status(500).send(err);
 //   }
 // });
-
+router.get("/getAllBrand",getAllBrand);
 
 router.get("/getAllUser",async(req,res)=>{
     try{
