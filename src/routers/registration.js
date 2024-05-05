@@ -114,4 +114,16 @@ router.patch("/editBrandBy/:id",async(req,res)=>{
   }
 });
 
+ 
+router.delete("/deleteBrandBy/:id",async(req,res)=>{
+  try{
+    let _id=req.params.id; 
+    const data=await RegistrationModel.findByIdAndDelete(_id);
+    res.json({status:true,msg:"Delete"});
+  }catch(err){
+    res.status(500).send(err);
+  }
+});
+
+ 
 module.exports=router;
