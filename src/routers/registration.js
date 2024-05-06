@@ -1,6 +1,6 @@
 const express=require("express");
 const router = express.Router();
-const {adminLoginController,brandRegistration,adminRegistration,getAllBrand}=require("../controllers/registrationController")
+const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration, adminRegistration,getAllBrand}=require("../controllers/registrationController")
 const RegistrationModel=require("../models/registration");
 
 // router.post("/registration",async(req,res)=>{
@@ -18,7 +18,10 @@ router.post("/registration", adminRegistration
 
 router.post("/brandRegistration", brandRegistration
 );
-
+router.post("/serviceRegistration", serviceRegistration
+);
+router.post("/empolyeeRegistration", empolyeeRegistration
+);
 // router.post("/login",async(req,res)=>{
 //      try{
 //       const {email,password}=req.body;
@@ -42,49 +45,7 @@ router.post("/login",adminLoginController )
 // const BrandModel = require('./models/Brand');
 // const UserModel = require('./models/User');
 
-// router.post("/login", async (req, res) => {
-//   try {
-//     const { email, password, role } = req.body;
-//     let user;
-
-     
-//     switch (role) {
-//       case "admin":
-//         user = await AdminModel.findOne({ email, password });
-//         break;
-//       case "brand":
-//         user = await BrandModel.findOne({ email, password });
-//         break;
-//       case "user":
-//         user = await UserModel.findOne({ email, password });
-//         break;
-//       default:
-//         return res.status(400).json({ status: false, msg: "Invalid role" });
-//     }
-
-//     if (!user) {
-//       return res.status(401).json({ status: false, msg: "Incorrect username or password" });
-//     }
-
-    
-//     switch (role) {
-//       case "admin":
-        
-//         return res.status(200).json({ status: true, msg: "Admin login successful", user });
-//       case "brand":
-        
-//         return res.status(200).json({ status: true, msg: "Brand login successful", user });
-//       case "user":
-      
-//         return res.status(200).json({ status: true, msg: "User login successful", user });
-//       default:
-//         return res.status(400).json({ status: false, msg: "Invalid role" });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(500).send(err);
-//   }
-// });
+ 
 router.get("/getAllBrand",getAllBrand);
 
 router.get("/getAllUser",async(req,res)=>{
