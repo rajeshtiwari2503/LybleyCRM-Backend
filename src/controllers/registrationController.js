@@ -1,5 +1,5 @@
 const { AdminModel, BrandRegistrationModel,ServiceModel,EmployeeModel, DealerModel } = require('../models/registration');
-
+ 
  
 
 const adminLoginController = async (req, res) => {
@@ -16,28 +16,28 @@ const adminLoginController = async (req, res) => {
 
         // Check each model sequentially until a user is found
         if (AdminModel) {
-            user = await AdminModel.findOne({ email });
+            user = await AdminModel.findOne({ email, password });
             if (user) {
                 role = "ADMIN";
             }
         }
 
         if (!user && BrandRegistrationModel) {
-            user = await BrandRegistrationModel.findOne({ email });
+            user = await BrandRegistrationModel.findOne({ email , password});
             if (user) {
                 role = "BRAND";
             }
         }
 
         if (!user && EmployeeModel) {
-            user = await EmployeeModel.findOne({ email });
+            user = await EmployeeModel.findOne({ email , password});
             if (user) {
                 role = "EMPLOYEE";
             }
         }
 
         if (!user && ServiceModel) {
-            user = await ServiceModel.findOne({ email });
+            user = await ServiceModel.findOne({ email, password });
             if (user) {
                 role = "SERVICE";
             }
@@ -48,7 +48,7 @@ const adminLoginController = async (req, res) => {
         }
 
         // Perform password validation (you may have this code elsewhere)
-
+       
         // Successful login
         return res.status(200).json({ status: true, msg: `${role} login successful`, user });
     } catch (err) {
