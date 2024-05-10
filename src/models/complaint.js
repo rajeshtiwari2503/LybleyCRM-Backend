@@ -11,4 +11,4 @@ const complaintSchema=new mongoose.Schema({
 const ComplaintModal=mongoose.Model("Complaints",complaintSchema)
 
 
-exports.module=ComplaintModal
+module.exports=ComplaintModal

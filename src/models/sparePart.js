@@ -15,6 +15,6 @@ const sparePartSchema=new mongoose.Schema({
   },{timestamps:true}
 )
 
-const SparePartModal=new mongoose.Model("SpareParts",sparePartSchema)
+const SparePartModal=new mongoose.model("SpareParts",sparePartSchema)
 
 module.exports=SparePartModal;

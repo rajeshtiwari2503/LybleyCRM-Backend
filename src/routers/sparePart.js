@@ -10,4 +10,4 @@ router.get("/getSparepartById",getSparePartById)
 router.patch("/editSparepart",editSparePart)
 router.delete("/deleteSparepart",deleteSparePart)
 
-exports.module=router
+module.exports=router

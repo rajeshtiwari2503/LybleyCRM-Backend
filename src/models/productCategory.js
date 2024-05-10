@@ -2,9 +2,9 @@ const mongoose=require("mongoose");
 
 const productCategorySchema=new mongoose.Schema({
       categoryName:{type:String,required:true},
-      adminId:{type:String,required:true},
-      brandId:{type:String,required:true},
-      status:{type:String,type:String,default:"ACTIVE"}
+      adminId:{type:String },
+      brandId:{type:String },
+      status:{type:String ,default:"ACTIVE"}
 
 },{timestamps:true});
 

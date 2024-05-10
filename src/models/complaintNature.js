@@ -1,12 +1,12 @@
 
 const mongoose=require("mongoose")
-const { type } = require("os")
+ 
 
-const complaintNature=new mongoose.Schema({
+const complaintNatureSchema=new mongoose.Schema({
   productName:{type:String,required:true},
   nature:{type:String,required:true},
 })
 
-const ComplaintNatureModal=mongoose.Model("ComplaintNature",complaintNature)
+const ComplaintNatureModal=mongoose.model("ComplaintNature",complaintNatureSchema)
 
-exports.module=ComplaintNatureModal
+module.exports=ComplaintNatureModal

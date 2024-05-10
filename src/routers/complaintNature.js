@@ -10,4 +10,4 @@ router.get("/getComplaintNatureById",getComplaintNatureById)
 router.patch("/editComplaintNature",editComplaintNature)
 router.delete("/deleteComplaintNature",deleteComplaintNature)
 
-exports.module=router
+module.exports=router;
