@@ -10,7 +10,7 @@ const productSchema=new mongoose.Schema({
       adminId:{type:String },
       brandId:{type:String },
       brandName:{type:String },
-      status:{type:String,type:String,default:"ACTIVE"}
+      status:{ type:String,default:"ACTIVE"}
 
 },{timestamps:true});
 

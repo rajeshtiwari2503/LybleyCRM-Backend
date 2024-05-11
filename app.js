@@ -16,7 +16,6 @@ const PORT=5000;
 app.use(registration);
 app.use(product);
 app.use(productCategory);
-app.use(productCategory);
 app.use(complaintNature);
 app.use(sparePart);
 
