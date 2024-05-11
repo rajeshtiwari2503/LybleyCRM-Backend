@@ -6,8 +6,8 @@ const router=express.Router()
 
 router.post("/addSparepart",addSparePart)
 router.get("/getAllSparepart",getAllSparePart)
-router.get("/getSparepartById",getSparePartById)
-router.patch("/editSparepart",editSparePart)
-router.delete("/deleteSparepart",deleteSparePart)
+router.get("/getSparepartById/:id",getSparePartById)
+router.patch("/editSparepart/:id",editSparePart)
+router.delete("/deleteSparepart/:id",deleteSparePart)
 
-exports.module=router
+module.exports=router

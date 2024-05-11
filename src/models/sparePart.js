@@ -5,16 +5,16 @@ const sparePartSchema=new mongoose.Schema({
         sparepartName:{type:String,required:true},
         sparepartDescription:{type:String,required:true},
         sku:{type:String,required:true},
-        price:{type:String,required:true},
-        image:{type:String,required:true},
-        adminId:{type:String,required:true},
-        brandId:{type:String,required:true},
-        brandName:{type:String,required:true},
-        status:{type:String,type:String,default:"ACTIVE"}
+        price:{type:String },
+        image:{type:String },
+        adminId:{type:String },
+        brandId:{type:String },
+        brandName:{type:String },
+        status:{type:String,default:"ACTIVE"}
   
   },{timestamps:true}
-)
+);
 
-const SparePartModal=new mongoose.Model("SpareParts",sparePartSchema)
+const SparePartModal=new mongoose.model("SpareParts",sparePartSchema);
 
 module.exports=SparePartModal;

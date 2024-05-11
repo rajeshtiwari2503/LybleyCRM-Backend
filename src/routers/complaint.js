@@ -10,4 +10,4 @@ router.get("/getComplaintById",getComplaintById)
 router.patch("/editComplaint",editComplaint)
 router.delete("/deleteComplaint",deleteComplaint)
 
-exports.module=router
+module.exports=router

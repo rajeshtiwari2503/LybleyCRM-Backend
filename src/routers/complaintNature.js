@@ -6,8 +6,8 @@ const router=express.Router()
 
 router.post("/addComplaintNature",addComplaintNature)
 router.get("/getAllComplaintNature",getAllComplaintNature)
-router.get("/getComplaintNatureById",getComplaintNatureById)
-router.patch("/editComplaintNature",editComplaintNature)
-router.delete("/deleteComplaintNature",deleteComplaintNature)
+router.get("/getComplaintNatureById/:id",getComplaintNatureById)
+router.patch("/editComplaintNature/:id",editComplaintNature)
+router.delete("/deleteComplaintNature/:id",deleteComplaintNature)
 
-exports.module=router
+module.exports=router;
