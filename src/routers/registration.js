@@ -1,6 +1,8 @@
 const express=require("express");
 const router = express.Router();
-const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration, adminRegistration,getAllBrand}=require("../controllers/registrationController")
+const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration, adminRegistration,userRegistration,
+  getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
+getAllEmployee,getEmployeeById,editEmployee,deleteEmployee }=require("../controllers/registrationController")
 const RegistrationModel=require("../models/registration");
 
 // router.post("/registration",async(req,res)=>{
@@ -22,22 +24,30 @@ router.post("/serviceRegistration", serviceRegistration
 );
 router.post("/empolyeeRegistration", empolyeeRegistration
 );
-// router.post("/login",async(req,res)=>{
-//      try{
-//       const {email,password}=req.body;
-//       const user=await RegistrationModel.findOne({email:email,password:password});
-//       if(user){
-//         res.send(user ,{ status: true, msg: "Registration successful" });
-//       }else{
-//         res.status(401).json({status: true, msg: "Incorrect username and password"} );
-//       }
-//      }catch(err){
-//       res.status(400).send(err);
-//      }
-// });
+router.post("/userRegistration", userRegistration
+); 
 
 router.post("/login",adminLoginController )
+router.get("/getAllBrand",getAllBrand )
+router.get("/getBrandBy/:id",getBrandById )
+router.patch("/editBrand/:id",editBrand )
+router.delete("/deleteBrand/:id",deleteBrand )
+ 
+router.get("/getAllService",getAllServiceCenter )
+router.get("/getServiceBy/:id",getServiceCenterById )
+router.patch("/editService/:id",editServiceCenter )
+router.delete("/deleteService/:id",deleteServiceCenter )
 
+router.get("/getAllEmployee",getAllEmployee )
+router.get("/getServiceBy/:id",getEmployeeById )
+router.patch("/editService/:id",editEmployee )
+router.delete("/deleteService/:id",deleteEmployee )
+
+
+router.get("/getAllUser",getAllEmployee )
+router.get("/getUserBy/:id",getEmployeeById )
+router.patch("/editUser/:id",editEmployee )
+router.delete("/deleteUser/:id",deleteEmployee )
 
 
 
