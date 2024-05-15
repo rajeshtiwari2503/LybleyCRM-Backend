@@ -4,10 +4,10 @@ const {addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplai
 
 const router=express.Router()
 
-router.post("/addComplaint",addComplaint)
+router.post("/createComplaint",addComplaint)
 router.get("/getAllComplaint",getAllComplaint)
-router.get("/getComplaintById",getComplaintById)
-router.patch("/editComplaint",editComplaint)
-router.delete("/deleteComplaint",deleteComplaint)
+router.get("/getComplaintById/:id",getComplaintById)
+router.patch("/editComplaint/:id",editComplaint)
+router.delete("/deleteComplaint/:id",deleteComplaint)
 
 module.exports=router
