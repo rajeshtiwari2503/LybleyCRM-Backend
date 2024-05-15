@@ -1,7 +1,6 @@
 const ComplaintModal =require("../models/complaint")
 
-const addComplaint  = async (req, res) => {
-  
+const addComplaint  = async(req, res) => {
         try{
             let body=req.body;
             let data=new ComplaintModal(body);
@@ -50,5 +49,16 @@ const editComplaint=async (req,res)=>{
         res.status(500).send(err);
      }
  }
+
+ const assignComplaint=async (req,res)=>{
+   try{
+       let _id=req.params.id;
+       let body=req.body;
+       let data=await ComplaintModal.findByIdAndUpdate(_id,body);
+       res.json({status:true,msg:"Complaint Assigned"});
+    }catch(err){
+       res.status(500).send(err);
+    }
+}
 
 module.exports = { addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplaint };

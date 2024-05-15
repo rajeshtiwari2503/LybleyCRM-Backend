@@ -7,6 +7,7 @@ const product=require("./src/routers/product");
 const productCategory=require("./src/routers/productCategory");
 const complaintNature=require("./src/routers/complaintNature");
 const sparePart=require("./src/routers/sparePart");
+const complaint=require("./src/routers/complaint");
 
 app.use(express.json());
 app.use(cors());
@@ -18,6 +19,7 @@ app.use(product);
 app.use(productCategory);
 app.use(complaintNature);
 app.use(sparePart);
+app.use(complaint);
 
 app.listen(PORT,()=>{
     console.log("Server is running on PORT",PORT);

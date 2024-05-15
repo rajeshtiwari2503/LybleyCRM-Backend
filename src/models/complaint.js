@@ -25,7 +25,7 @@ const complaintSchema=new mongoose.Schema({
     complaintType:{type:String },
 })
 
-const ComplaintModal=mongoose.Model("Complaints",complaintSchema)
+const ComplaintModal=new mongoose.model("Complaints",complaintSchema)
 
 
 module.exports=ComplaintModal
