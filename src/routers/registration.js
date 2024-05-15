@@ -1,20 +1,15 @@
 const express=require("express");
 const router = express.Router();
-const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration, adminRegistration,userRegistration,
+const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration,dealerRegistration, adminRegistration,userRegistration,
   getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
-getAllEmployee,getEmployeeById,editEmployee,deleteEmployee }=require("../controllers/registrationController")
+getAllEmployee,getEmployeeById,editEmployee,deleteEmployee ,getAllDealer,getDealerById,editDealer,deleteDealer,
+getAllUser,
+getUserById,
+editUser,
+deleteUser}=require("../controllers/registrationController")
 const RegistrationModel=require("../models/registration");
 
-// router.post("/registration",async(req,res)=>{
-//       try{
-//         const body=req.body;
-//         const newData=new RegistrationModel(body);
-//         await newData.save();
-//         res.json({status:true,msg:"Registration successful"});
-//       }catch(err){
-//         res.status(500).send(err);
-//       }
-// });
+ 
 router.post("/registration", adminRegistration
 );
 
@@ -22,7 +17,9 @@ router.post("/brandRegistration", brandRegistration
 );
 router.post("/serviceRegistration", serviceRegistration
 );
-router.post("/empolyeeRegistration", empolyeeRegistration
+router.post("/employeeRegistration", empolyeeRegistration
+);
+router.post("/dealerRegistration", dealerRegistration
 );
 router.post("/userRegistration", userRegistration
 ); 
@@ -39,21 +36,20 @@ router.patch("/editService/:id",editServiceCenter )
 router.delete("/deleteService/:id",deleteServiceCenter )
 
 router.get("/getAllEmployee",getAllEmployee )
-router.get("/getServiceBy/:id",getEmployeeById )
-router.patch("/editService/:id",editEmployee )
-router.delete("/deleteService/:id",deleteEmployee )
+router.get("/getEmployeeBy/:id",getEmployeeById )
+router.patch("/editEmployee/:id",editEmployee )
+router.delete("/deleteEmployee/:id",deleteEmployee )
 
+router.get("/getAllDealer",getAllDealer )
+router.get("/getDealerBy/:id",getDealerById )
+router.patch("/editDealer/:id",editDealer )
+router.delete("/deleteDealer/:id",deleteDealer )
 
-router.get("/getAllUser",getAllEmployee )
-router.get("/getUserBy/:id",getEmployeeById )
-router.patch("/editUser/:id",editEmployee )
-router.delete("/deleteUser/:id",deleteEmployee )
+router.get("/getAllUser",getAllUser )
+router.get("/getUserBy/:id",getUserById )
+router.patch("/editUser/:id",editUser )
+router.delete("/deleteUser/:id",deleteUser )
 
-
-
-// const AdminModel = require('./models/Admin');
-// const BrandModel = require('./models/Brand');
-// const UserModel = require('./models/User');
 
  
 router.get("/getAllBrand",getAllBrand);
