@@ -1,4 +1,5 @@
 const mongoose=require("mongoose")
+const { type } = require("os")
 
 const complaintSchema=new mongoose.Schema({
     complaintName:{type:String,required:true},
@@ -23,7 +24,8 @@ const complaintSchema=new mongoose.Schema({
     complaintNature:{type:String },
     complaintDetails:{type:String },
     complaintType:{type:String },
-})
+    status:{type:String,default:"PENDIND"}
+},{timestamps:true})
 
 const ComplaintModal=new mongoose.model("Complaints",complaintSchema)
 

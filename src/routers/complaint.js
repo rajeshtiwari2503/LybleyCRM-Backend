@@ -1,6 +1,6 @@
 const express = require("express")
 
-const {addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplaint}=require("../controllers/complaintController")
+const {addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplaint,updateComplaint}=require("../controllers/complaintController")
 
 const router=express.Router()
 
@@ -9,5 +9,6 @@ router.get("/getAllComplaint",getAllComplaint)
 router.get("/getComplaintById/:id",getComplaintById)
 router.patch("/editComplaint/:id",editComplaint)
 router.delete("/deleteComplaint/:id",deleteComplaint)
+router.patch("/updateComplaint/:id",updateComplaint )
 
 module.exports=router

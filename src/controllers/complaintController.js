@@ -50,15 +50,15 @@ const editComplaint=async (req,res)=>{
      }
  }
 
- const assignComplaint=async (req,res)=>{
+ const updateComplaint=async (req,res)=>{
    try{
        let _id=req.params.id;
        let body=req.body;
        let data=await ComplaintModal.findByIdAndUpdate(_id,body);
-       res.json({status:true,msg:"Complaint Assigned"});
+       res.json({status:true,msg:"Complaint Updated"});
     }catch(err){
        res.status(500).send(err);
     }
 }
 
-module.exports = { addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplaint };
+module.exports = { addComplaint,getAllComplaint,getComplaintById,editComplaint,deleteComplaint,updateComplaint };
