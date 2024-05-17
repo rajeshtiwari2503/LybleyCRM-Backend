@@ -57,8 +57,6 @@ const adminLoginController = async (req, res) => {
     }
 }
 
-
-
 const adminRegistration = async (req, res) => {
     try {
         const { email } = req.body;
