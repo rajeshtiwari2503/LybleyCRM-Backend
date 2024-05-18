@@ -1,3 +1,6 @@
+
+const otpGenerator=require("otp-generator")
+const {smsSend}=require("../services/service")
 const { AdminModel, BrandRegistrationModel,ServiceModel,EmployeeModel, DealerModel,UserModel } = require('../models/registration');
  
  
@@ -357,8 +360,52 @@ const editDealer=async (req,res)=>{
         res.status(500).send(err);
      }
  }
+const otpSending=async (req, res) => {
+    try {
+        let body = req.body;
+        let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+        let user = await UserModel.findOneAndUpdate({ email: body.email }, { otp: otp });
+        if (user) {
+            smsSend(otp, user.contact);
+            res.json({ status: true, msg: "OTP sent" });
+        } else {
+            res.json({ status: false, msg: "Something went wrong!" });
+        }
+    } catch (err) {
+        res.status(400).send(err);
+    }
+  }
 
+  const otpVerification= async (req, res) => {
+    try {
+        let body = req.body;
+        let user = await UserModel.findOne({ email: body.email, otp: body.otp });
+        if (user) {
+            let user1 = await UserModel.findByIdAndUpdate({ _id: user._id } );
+            res.json({ status: true, msg: "Verified" });
+        } else {
+            res.send({ status: false, msg: "Incorrect OTP" });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+  }
+  const forgetPassword=async (req, res) => {
+    try {
+        let body = req.body;
+        let bool = true;
+        let user = await UserModel.findOneAndUpdate({ email: body.email }, { password: body.password });
+        if (user) {
+            res.json({ status: true, msg: "Password changed successfully!" });
+             sendMail(body.email,body.password,bool);
+        } else {
+            res.json({ status: false, msg: "Something went wrong!" });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+  }
 module.exports = { adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration,dealerRegistration, adminRegistration,userRegistration,
     getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
 getAllEmployee,getEmployeeById,editEmployee,deleteEmployee ,getAllUser,getUserById,editUser,deleteUser
-,getAllDealer,getDealerById,editDealer,deleteDealer};
+,getAllDealer,getDealerById,editDealer,deleteDealer,otpVerification,forgetPassword,otpSending};

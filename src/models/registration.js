@@ -112,6 +112,7 @@ const userRegistrationSchema = new mongoose.Schema({
     contact: { type: Number, required: true },
     password: { type: String, required: true },
     role: { type: String, default: "USER" }
+    ,otp:{type:Number}
 },
     { timestamps: true });
 
