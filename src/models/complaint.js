@@ -2,8 +2,8 @@ const mongoose=require("mongoose")
 const { type } = require("os")
 
 const complaintSchema=new mongoose.Schema({
-    complaintName:{type:String,required:true},
-    productCategory:{type:String,required:true},
+    complaintName:{type:String },
+    productCategory:{type:String },
     categoryId:{type:String },
     brand:{type:String },
     brandId:{type:String },

@@ -14,7 +14,7 @@ const addComplaint  = async(req, res) => {
 
 const getAllComplaint=async(req,res)=>{
     try{
-        let data=await ComplaintModal.find({});
+        let data=await ComplaintModal.find({}).sort({ _id: -1 });
         res.send(data);
      }catch(err){
         res.status(400).send(err);

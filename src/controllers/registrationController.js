@@ -390,21 +390,62 @@ const otpSending=async (req, res) => {
         res.status(500).send(err);
     }
   }
-  const forgetPassword=async (req, res) => {
+//   const forgetPassword=async (req, res) => {
+//     try {
+//         let body = req.body;
+//         let bool = true;
+//         let user = await UserModel.findOneAndUpdate({ email: body.email }, { password: body.password });
+//         if (user) {
+//             res.json({ status: true, msg: "Password changed successfully!" });
+//              sendMail(body.email,body.password,bool);
+//         } else {
+//             res.json({ status: false, msg: "Something went wrong!" });
+//         }
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+//   }
+
+const forgetPassword = async (req, res) => {
     try {
-        let body = req.body;
+        const { email, password } = req.body;
+        let user;
         let bool = true;
-        let user = await UserModel.findOneAndUpdate({ email: body.email }, { password: body.password });
+
+        const updateOptions = { email: email, password: password };
+        const findAndUpdate = async (Model) => {
+            return await Model.findOneAndUpdate({ email }, { password }, { new: true });
+        };
+
+        // Check in each model
+        const models = [
+            UserModel,
+            AdminModel,
+            BrandRegistrationModel,
+            EmployeeModel,
+            ServiceModel,
+            DealerModel
+        ];
+
+        for (const Model of models) {
+            user = await findAndUpdate(Model);
+            if (user) break;
+        }
+
         if (user) {
+            //    sendMail(body.email,body.password,bool);
             res.json({ status: true, msg: "Password changed successfully!" });
-             sendMail(body.email,body.password,bool);
         } else {
-            res.json({ status: false, msg: "Something went wrong!" });
+            res.json({ status: false, msg: "Email not found in any model!" });
         }
     } catch (err) {
-        res.status(500).send(err);
+        console.error("Error in forgetPassword:", err);
+        res.status(500).send({ status: false, msg: "Internal server error", error: err });
     }
-  }
+};
+
+ 
+
 module.exports = { adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration,dealerRegistration, adminRegistration,userRegistration,
     getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
 getAllEmployee,getEmployeeById,editEmployee,deleteEmployee ,getAllUser,getUserById,editUser,deleteUser
