@@ -15,7 +15,7 @@ const addSparePart  = async (req, res) => {
 
 const getAllSparePart=async(req,res)=>{
     try{
-        let data=await SparePartModal.find({});
+        let data=await SparePartModal.find({}).sort({ _id: -1 });
         res.send(data);
      }catch(err){
         res.status(400).send(err);
