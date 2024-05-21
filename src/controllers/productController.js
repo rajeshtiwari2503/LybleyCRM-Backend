@@ -15,7 +15,7 @@ const addProduct  = async (req, res) => {
 
 const getAllProduct=async(req,res)=>{
     try{
-        let data=await ProductModel.find({});
+        let data=await ProductModel.find({}).sort({ _id: -1 });
         res.send(data);
      }catch(err){
         res.status(400).send(err);

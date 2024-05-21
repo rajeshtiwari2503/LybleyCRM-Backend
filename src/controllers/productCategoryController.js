@@ -19,7 +19,7 @@ const addProductCategory = async (req, res) => {
 
 const getAllProductCategory=async(req,res)=>{
     try{
-        let data=await ProductCategoryModel.find({});
+        let data=await ProductCategoryModel.find({}).sort({ _id: -1 });
         res.send(data);
      }catch(err){
         res.status(400).send(err);

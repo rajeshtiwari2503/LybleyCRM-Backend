@@ -157,7 +157,7 @@ const dealerRegistration = async (req, res) => {
 };
 const getAllBrand=async(req,res)=>{
     try{
-      const data=await BrandRegistrationModel.find({});
+      const data=await BrandRegistrationModel.find({}).sort({ _id: -1 });
       res.send(data);
     }catch(err){
       res.status(400).send(err);
@@ -250,7 +250,7 @@ const editServiceCenter=async (req,res)=>{
  }
   const getAllEmployee=async(req,res)=>{
     try{
-      const data=await EmployeeModel.find({});
+      const data=await EmployeeModel.find({}).sort({ _id: -1 });
       res.send(data);
     }catch(err){
       res.status(400).send(err);
@@ -288,7 +288,7 @@ const editEmployee=async (req,res)=>{
 
  const getAllUser=async(req,res)=>{
     try{
-      const data=await UserModel.find({});
+      const data=await UserModel.find({}).sort({ _id: -1 });
       res.send(data);
     }catch(err){
       res.status(400).send(err);
@@ -325,7 +325,7 @@ const editUser=async (req,res)=>{
  }
  const getAllDealer=async(req,res)=>{
     try{
-      const data=await DealerModel.find({});
+      const data=await DealerModel.find({}).sort({ _id: -1 });
       res.send(data);
     }catch(err){
       res.status(400).send(err);
