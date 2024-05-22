@@ -67,8 +67,8 @@ const serviceCenterRegistrationSchema = new mongoose.Schema({
     transferDate: { type: String },
     gstNo: { type: String },
     productCategory: { type: String },
-   coveragePinCode:{ type: String },
-   coverageArea:{ type: String },
+    coveragePinCode: { type: String },
+    coverageArea: { type: String },
     website: { type: String },
     landlineNo: { type: Number },
     addressLine1: { type: String },
@@ -83,7 +83,7 @@ const serviceCenterRegistrationSchema = new mongoose.Schema({
     panNumber: { type: String },
     url: { type: String },
     logo: { type: String },
-    status: { type: String , default: "ACTIVE"},
+    status: { type: String, default: "ACTIVE" },
 }, { timestamps: true });
 
 const employeeRegistrationSchema = new mongoose.Schema({
@@ -108,8 +108,10 @@ const userRegistrationSchema = new mongoose.Schema({
     email: { type: String, required: true },
     contact: { type: Number, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: "USER" }
-    ,otp:{type:Number}
+    address: { type: String, required: true },
+    role: { type: String, default: "USER" },
+    verification: { type: String, default: "NOT_VERIFY" }
+    , otp: { type: Number }
 },
     { timestamps: true });
 

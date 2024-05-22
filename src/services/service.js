@@ -21,38 +21,70 @@ async function smsSend(otp, mobile) {
   }
 }
 
-async function careerOrContactMail(name, contact, email, message) {
+// async function careerOrContactMail(name, contact, email, otp) {
 
-  let transporter = nodemailer.createTransport({
-    host: 'smtp.zoho.in',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-      user: "hi@sparetrade.in",
-      pass: "ST@lybley9"
+//   let transporter = nodemailer.createTransport({
+//     host: 'smtp.zoho.in',
+//     port: 587,
+//     secure: false,
+//     requireTLS: true,
+//     auth: {
+//       user: "hi@sparetrade.in",
+//       pass: "ST@lybley9"
+//     }
+//   });
+
+//   // Email content
+//   let mailOptions = {
+//     from: `<${email}>`,
+//     to: 'help@lybley.com',
+//     subject: ' Your Email Verification OTP',
+//     text: `
+//       Name: ${name}
+//       Contact: ${contact}
+//       Email: ${email}
+//       otp: ${otp}
+//     `
+//   };
+
+//   try {
+//     let info = await transporter.sendMail(mailOptions);
+//   } catch (err) {
+//     console.log("err", err);
+//   }
+// }
+ 
+
+
+async function sendMail(email, otp) {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.zoho.in",
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+            user: "hi@sparetrade.in",
+            pass: "ST@lybley9"
+        }
+    });
+
+    try {
+        let info = await transporter.sendMail({
+            from: '"Lybley" <hi@sparetrade.in>',
+            to: email,
+            subject: "Your Email Verification OTP",
+            html: `<h4>Email Verification</h4>
+                   <p>Thank you for registering with Lybley. Please use the following OTP to verify your email address:</p>
+                   <h2>${otp}</h2>
+                   <p>If you did not request this, please ignore this email.</p>`
+        });
+
+        console.log('Email sent: ' + info.response);
+    } catch (err) {
+        console.log('Error: ', err);
     }
-  });
-
-  // Email content
-  let mailOptions = {
-    from: `<${email}>`,
-    to: 'help@lybley.com',
-    subject: 'New Contact Form Submission',
-    text: `
-      Name: ${name}
-      Contact: ${contact}
-      Email: ${email}
-      Message: ${message}
-    `
-  };
-
-  try {
-    let info = await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.log("err", err);
-  }
 }
+
 
 // async function sendMail(email,pass,isForget){
 //      let transporter = nodemailer.createTransport({
@@ -127,5 +159,5 @@ const upload = () => multer({
 module.exports = {
   smsSend,
   upload,
-  careerOrContactMail
+  sendMail
 }
