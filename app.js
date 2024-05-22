@@ -1,5 +1,6 @@
 const express=require("express");
 require("./src/db/connection");
+require("dotenv").config();
 const cors=require("cors");
 const app=express();
 const registration=require("./src/routers/registration");
@@ -13,7 +14,7 @@ const location=require("./src/routers/location");
 app.use(express.json());
 app.use(cors());
 
-const PORT=5000;
+const PORT=process.env.PORT || 5000;
 
 app.use(registration);
 app.use(product);
@@ -23,6 +24,6 @@ app.use(sparePart);
 app.use(complaint);
 app.use(location);
 
-app.listen(PORT,()=>{
+app.listen(5000,()=>{
     console.log("Server is running on PORT",PORT);
 });
