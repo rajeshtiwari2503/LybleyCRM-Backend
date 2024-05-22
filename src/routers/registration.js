@@ -3,7 +3,7 @@ const router = express.Router();
 const {adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration,dealerRegistration, adminRegistration,userRegistration,
   getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
 getAllEmployee,getEmployeeById,editEmployee,deleteEmployee ,getAllDealer,getDealerById,editDealer,deleteDealer,getAllUser,
-getUserById,editUser,deleteUser,otpVerification,forgetPassword,
+getUserById,editUser,deleteUser,otpVerification,otpVerificationSending,forgetPassword,mobileEmailVerification,
 otpSending}=require("../controllers/registrationController")
 const RegistrationModel=require("../models/registration");
 
@@ -96,6 +96,8 @@ router.delete("/deleteBrandBy/:id",async(req,res)=>{
 
 router.post("/sendOtp",otpSending);
 router.post("/otpVerification",otpVerification);
+router.post("/mobileEmailSendOtp",otpVerificationSending);
+router.post("/mobileEmailOtpVerification",mobileEmailVerification);
 
 router.patch("/forgetPassword",forgetPassword )
  

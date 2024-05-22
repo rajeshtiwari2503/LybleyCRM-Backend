@@ -1,9 +1,9 @@
 
-const otpGenerator=require("otp-generator")
-const {smsSend}=require("../services/service")
-const { AdminModel, BrandRegistrationModel,ServiceModel,EmployeeModel, DealerModel,UserModel } = require('../models/registration');
- 
- 
+const otpGenerator = require("otp-generator")
+const { smsSend, sendMail } = require("../services/service")
+const { AdminModel, BrandRegistrationModel, ServiceModel, EmployeeModel, DealerModel, UserModel } = require('../models/registration');
+
+
 
 const adminLoginController = async (req, res) => {
     try {
@@ -17,48 +17,34 @@ const adminLoginController = async (req, res) => {
         let user;
         let role;
 
-        // Check each model sequentially until a user is found
-        if (AdminModel) {
-            user = await AdminModel.findOne({ email, password });
-            if (user) {
-                role = "ADMIN";
+        // Function to check a model and log the result
+        const checkModel = async (model, roleName) => {
+            const foundUser = await model.findOne({ email, password });
+            if (foundUser) {
+                console.log(`User found in ${roleName} model`);
+                user = foundUser;
+                role = roleName;
+                return true;
             }
-        }
+            return false;
+        };
 
-        if (!user && BrandRegistrationModel) {
-            user = await BrandRegistrationModel.findOne({ email , password});
-            if (user) {
-                role = "BRAND";
-            }
-        }
+        // Sequentially check each model
+        if (await checkModel(AdminModel, 'ADMIN')) return res.status(200).json({ status: true, msg: "ADMIN login successful", user });
+        if (await checkModel(BrandRegistrationModel, 'BRAND')) return res.status(200).json({ status: true, msg: "BRAND login successful", user });
+        if (await checkModel(EmployeeModel, 'EMPLOYEE')) return res.status(200).json({ status: true, msg: "EMPLOYEE login successful", user });
+        if (await checkModel(ServiceModel, 'SERVICE')) return res.status(200).json({ status: true, msg: "SERVICE login successful", user });
+        if (await checkModel(UserModel, 'USER')) return res.status(200).json({ status: true, msg: "USER login successful", user });
 
-        if (!user && EmployeeModel) {
-            user = await EmployeeModel.findOne({ email , password});
-            if (user) {
-                role = "EMPLOYEE";
-            }
-        }
-
-        if (!user && ServiceModel) {
-            user = await ServiceModel.findOne({ email, password });
-            if (user) {
-                role = "SERVICE";
-            }
-        }
-
-        if (!user) {
-            return res.status(401).json({ status: false, msg: "Incorrect username or password" });
-        }
-
-        // Perform password validation (you may have this code elsewhere)
-       
-        // Successful login
-        return res.status(200).json({ status: true, msg: `${role} login successful`, user });
+        // If no user is found
+        return res.status(401).json({ status: false, msg: "Incorrect username or password" });
     } catch (err) {
         console.error(err);
         return res.status(500).send(err);
     }
-}
+};
+
+module.exports = adminLoginController;
 
 const adminRegistration = async (req, res) => {
     try {
@@ -155,15 +141,15 @@ const dealerRegistration = async (req, res) => {
         return res.status(500).send(err);
     }
 };
-const getAllBrand=async(req,res)=>{
-    try{
-      const data=await BrandRegistrationModel.find({}).sort({ _id: -1 });
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
+const getAllBrand = async (req, res) => {
+    try {
+        const data = await BrandRegistrationModel.find({}).sort({ _id: -1 });
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
     }
-  }
-  const userRegistration = async (req, res) => {
+}
+const userRegistration = async (req, res) => {
     try {
         const { email } = req.body;
 
@@ -173,7 +159,7 @@ const getAllBrand=async(req,res)=>{
             return res.status(400).json({ status: false, msg: "Email already registered" });
         }
 
-    
+
         const newData = new UserModel(req.body);
         await newData.save();
         return res.json({ status: true, msg: "Registration successful" });
@@ -182,185 +168,185 @@ const getAllBrand=async(req,res)=>{
         return res.status(500).send(err);
     }
 };
-  const getBrandById=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await BrandRegistrationModel.findById(_id);
+const getBrandById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await BrandRegistrationModel.findById(_id);
         res.send(data);
-     }catch(err){
+    } catch (err) {
         res.status(400).send(err);
-     }
-}
-
-const editBrand=async (req,res)=>{
-    try{
-        let _id=req.params.id;
-        let body=req.body;
-        let data=await BrandRegistrationModel.findByIdAndUpdate(_id,body);
-        res.json({status:true,msg:"Brand Updated"});
-     }catch(err){
-        res.status(500).send(err);
-     }
-}
- const deleteBrand=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await BrandRegistrationModel.findByIdAndDelete(_id);
-        res.json({status:true,msg:"Brand Deteled"});
-     }catch(err){
-        res.status(500).send(err);
-     }
- }
-  const getAllServiceCenter=async(req,res)=>{
-    try{
-      const data=await ServiceModel.find({});
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
     }
-  }
-  const getServiceCenterById=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await ServiceModel.findById(_id);
-        res.send(data);
-     }catch(err){
-        res.status(400).send(err);
-     }
 }
 
-const editServiceCenter=async (req,res)=>{
-    try{
-        let _id=req.params.id;
-        let body=req.body;
-        let data=await ServiceModel.findByIdAndUpdate(_id,body);
-        res.json({status:true,msg:"ServiceCenter Updated"});
-     }catch(err){
+const editBrand = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let body = req.body;
+        let data = await BrandRegistrationModel.findByIdAndUpdate(_id, body);
+        res.json({ status: true, msg: "Brand Updated" });
+    } catch (err) {
         res.status(500).send(err);
-     }
-}
- const deleteServiceCenter=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await ServiceModel.findByIdAndDelete(_id);
-        res.json({status:true,msg:"ServiceCenter Deteled"});
-     }catch(err){
-        res.status(500).send(err);
-     }
- }
-  const getAllEmployee=async(req,res)=>{
-    try{
-      const data=await EmployeeModel.find({}).sort({ _id: -1 });
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
     }
-  }
-  const getEmployeeById=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await EmployeeModel.findById(_id);
-        res.send(data);
-     }catch(err){
-        res.status(400).send(err);
-     }
 }
-
-const editEmployee=async (req,res)=>{
-    try{
-        let _id=req.params.id;
-        let body=req.body;
-        let data=await EmployeeModel.findByIdAndUpdate(_id,body);
-        res.json({status:true,msg:"Employee Updated"});
-     }catch(err){
+const deleteBrand = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await BrandRegistrationModel.findByIdAndDelete(_id);
+        res.json({ status: true, msg: "Brand Deteled" });
+    } catch (err) {
         res.status(500).send(err);
-     }
-}
- const deleteEmployee=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await EmployeeModel.findByIdAndDelete(_id);
-        res.json({status:true,msg:"Employee Deteled"});
-     }catch(err){
-        res.status(500).send(err);
-     }
- }
-
- const getAllUser=async(req,res)=>{
-    try{
-      const data=await UserModel.find({}).sort({ _id: -1 });
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
     }
-  }
-  const getUserById=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await UserModel.findById(_id);
+}
+const getAllServiceCenter = async (req, res) => {
+    try {
+        const data = await ServiceModel.find({});
         res.send(data);
-     }catch(err){
+    } catch (err) {
         res.status(400).send(err);
-     }
-}
-
-const editUser=async (req,res)=>{
-    try{
-        let _id=req.params.id;
-        let body=req.body;
-        let data=await UserModel.findByIdAndUpdate(_id,body);
-        res.json({status:true,msg:"User Updated"});
-     }catch(err){
-        res.status(500).send(err);
-     }
-}
- const deleteUser=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await UserModel.findByIdAndDelete(_id);
-        res.json({status:true,msg:"User Deteled"});
-     }catch(err){
-        res.status(500).send(err);
-     }
- }
- const getAllDealer=async(req,res)=>{
-    try{
-      const data=await DealerModel.find({}).sort({ _id: -1 });
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
     }
-  }
-  const getDealerById=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await DealerModel.findById(_id);
+}
+const getServiceCenterById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await ServiceModel.findById(_id);
         res.send(data);
-     }catch(err){
+    } catch (err) {
         res.status(400).send(err);
-     }
+    }
 }
 
-const editDealer=async (req,res)=>{
-    try{
-        let _id=req.params.id;
-        let body=req.body;
-        let data=await DealerModel.findByIdAndUpdate(_id,body);
-        res.json({status:true,msg:"Dealer Updated"});
-     }catch(err){
+const editServiceCenter = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let body = req.body;
+        let data = await ServiceModel.findByIdAndUpdate(_id, body);
+        res.json({ status: true, msg: "ServiceCenter Updated" });
+    } catch (err) {
         res.status(500).send(err);
-     }
+    }
 }
- const deleteDealer=async(req,res)=>{
-    try{
-        let _id=req.params.id;
-        let data=await DealerModel.findByIdAndDelete(_id);
-        res.json({status:true,msg:"Dealer Deteled"});
-     }catch(err){
+const deleteServiceCenter = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await ServiceModel.findByIdAndDelete(_id);
+        res.json({ status: true, msg: "ServiceCenter Deteled" });
+    } catch (err) {
         res.status(500).send(err);
-     }
- }
-const otpSending=async (req, res) => {
+    }
+}
+const getAllEmployee = async (req, res) => {
+    try {
+        const data = await EmployeeModel.find({}).sort({ _id: -1 });
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+const getEmployeeById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await EmployeeModel.findById(_id);
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+const editEmployee = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let body = req.body;
+        let data = await EmployeeModel.findByIdAndUpdate(_id, body);
+        res.json({ status: true, msg: "Employee Updated" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+const deleteEmployee = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await EmployeeModel.findByIdAndDelete(_id);
+        res.json({ status: true, msg: "Employee Deteled" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+
+const getAllUser = async (req, res) => {
+    try {
+        const data = await UserModel.find({}).sort({ _id: -1 });
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+const getUserById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await UserModel.findById(_id);
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+const editUser = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let body = req.body;
+        let data = await UserModel.findByIdAndUpdate(_id, body);
+        res.json({ status: true, msg: "User Updated" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+const deleteUser = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await UserModel.findByIdAndDelete(_id);
+        res.json({ status: true, msg: "User Deteled" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+const getAllDealer = async (req, res) => {
+    try {
+        const data = await DealerModel.find({}).sort({ _id: -1 });
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+const getDealerById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await DealerModel.findById(_id);
+        res.send(data);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+const editDealer = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let body = req.body;
+        let data = await DealerModel.findByIdAndUpdate(_id, body);
+        res.json({ status: true, msg: "Dealer Updated" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+const deleteDealer = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        let data = await DealerModel.findByIdAndDelete(_id);
+        res.json({ status: true, msg: "Dealer Deteled" });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+const otpSending = async (req, res) => {
     try {
         let body = req.body;
         let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
@@ -374,22 +360,111 @@ const otpSending=async (req, res) => {
     } catch (err) {
         res.status(400).send(err);
     }
-  }
-
-  const otpVerification= async (req, res) => {
+}
+const otpVerificationSending = async (req, res) => {
     try {
         let body = req.body;
-        let user = await UserModel.findOne({ email: body.email, otp: body.otp });
+        // console.log(body);
+        let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+        let filter = {};
+
+        if (body.contact) {
+            filter = { contact: body.contact };
+        } else if (body.email) {
+            filter = { email: body.email };
+        } else {
+            return res.status(400).json({ status: false, msg: "Invalid request" });
+        }
+        // console.log(filter);
+        let user = await UserModel.findOneAndUpdate(filter, { otp: otp });
+        // console.log(user);
         if (user) {
-            let user1 = await UserModel.findByIdAndUpdate({ _id: user._id } );
+            if (body.contact) {
+                smsSend(otp, user.contact);
+            } else if (body.email) {
+                // console.log("dhghghg");
+                sendMail( body.email, otp,);
+            }
+            return res.json({ status: true, msg: "OTP sent" });
+        } else {
+            return res.json({ status: false, msg: "User not found" });
+        }
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+}
+
+const otpVerification = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await UserModel.findOne({ email, otp });
+        if (user) {
             res.json({ status: true, msg: "Verified" });
         } else {
-            res.send({ status: false, msg: "Incorrect OTP" });
+            res.status(400).json({ status: false, msg: "Incorrect OTP" });
         }
     } catch (err) {
         res.status(500).send(err);
     }
-  }
+}
+
+const mobileEmailVerification = async (req, res) => {
+    try {
+        const { email, contact, otp } = req.body;
+
+        // Find the user by email or contact and OTP
+        const user = await UserModel.findOne({ $or: [{ email }, { contact }], otp });
+
+        if (user) {
+            // Update the user's verification status if email is provided
+            if (email) {
+                const verify = await UserModel.findByIdAndUpdate(
+                    user._id,
+                    { verification: 'VERIFIED' },
+                    { new: true }
+                );
+                return res.json({ status: true, msg: "Verified" });
+            }
+            // If contact is provided, return a different response
+            return res.json({ status: true, msg: "Verified" });
+        } else {
+            return res.status(400).json({ status: false, msg: "Incorrect OTP" });
+        }
+    } catch (err) {
+        return res.status(500).send(err);
+    }
+};
+
+
+
+// const mobileEmailVerification = async (req, res) => {
+//     try {
+//         const { email, contact, otp } = req.body;
+
+//         // Find the user by email or contact and OTP
+//         const user = await UserModel.findOne({ $or: [{ email }, { contact }], otp });
+
+//         if (user) {
+//             // Update the user's verification status
+//            if(email){
+
+//            const verify = await UserModel.findByIdAndUpdate(
+//                 user._id,
+//                 { verification: 'VERIFIED' },
+//                 { new: true }
+//             );
+//             res.json({ status: true, msg: "Verified" });
+//         }
+
+//             res.json({ status: true, msg: "Verified" });
+//         } else {
+//             res.status(400).json({ status: false, msg: "Incorrect OTP" });
+//         }
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// };
+
 //   const forgetPassword=async (req, res) => {
 //     try {
 //         let body = req.body;
@@ -444,9 +519,11 @@ const forgetPassword = async (req, res) => {
     }
 };
 
- 
 
-module.exports = { adminLoginController,brandRegistration,serviceRegistration,empolyeeRegistration,dealerRegistration, adminRegistration,userRegistration,
-    getAllBrand,getBrandById,editBrand,deleteBrand,getAllServiceCenter,getServiceCenterById,editServiceCenter,deleteServiceCenter,
-getAllEmployee,getEmployeeById,editEmployee,deleteEmployee ,getAllUser,getUserById,editUser,deleteUser
-,getAllDealer,getDealerById,editDealer,deleteDealer,otpVerification,forgetPassword,otpSending};
+
+module.exports = {
+    adminLoginController, brandRegistration, serviceRegistration, empolyeeRegistration, dealerRegistration, adminRegistration, userRegistration,
+    getAllBrand, getBrandById, editBrand, deleteBrand, getAllServiceCenter, getServiceCenterById, editServiceCenter, deleteServiceCenter,
+    getAllEmployee, getEmployeeById, editEmployee, deleteEmployee, getAllUser, getUserById, editUser, deleteUser
+    , getAllDealer, getDealerById, editDealer, deleteDealer, otpVerification, otpVerificationSending, mobileEmailVerification, forgetPassword, otpSending
+};
