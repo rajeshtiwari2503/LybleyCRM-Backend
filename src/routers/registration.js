@@ -61,15 +61,7 @@ router.get("/getAllUser",async(req,res)=>{
     }
 });
 
-router.get("/getUserBy/:id",async(req,res)=>{
-    try{
-      let _id=req.params.id; 
-      const data=await RegistrationModel.findById(_id);
-      res.send(data);
-    }catch(err){
-      res.status(400).send(err);
-    }
-});
+ 
 
 router.patch("/editBrandBy/:id",async(req,res)=>{
   try{

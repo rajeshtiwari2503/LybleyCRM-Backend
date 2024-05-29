@@ -21,7 +21,7 @@ const adminLoginController = async (req, res) => {
         const checkModel = async (model, roleName) => {
             const foundUser = await model.findOne({ email, password });
             if (foundUser) {
-                console.log(`User found in ${roleName} model`);
+                // console.log(`User found in ${roleName} model`);
                 user = foundUser;
                 role = roleName;
                 return true;
@@ -379,12 +379,14 @@ const otpVerificationSending = async (req, res) => {
         let user = await UserModel.findOneAndUpdate(filter, { otp: otp });
         // console.log(user);
         if (user) {
-            if (body.contact) {
-                smsSend(otp, user.contact);
-            } else if (body.email) {
-                // console.log("dhghghg");
-                sendMail( body.email, otp,);
-            }
+            // if (body.contact) {
+            //     smsSend(otp, user.contact);
+            // } else if (body.email) {
+
+            //     sendMail( body.email, otp,);
+            // }
+            // console.log(user);
+            smsSend(otp, user.contact);
             return res.json({ status: true, msg: "OTP sent" });
         } else {
             return res.json({ status: false, msg: "User not found" });
